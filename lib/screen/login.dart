@@ -1,5 +1,5 @@
+import 'package:doan_mini_flutter/widget/navbar.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class LoginPageState extends State<LoginPage> {
     if (isValid != null && isValid == true) {
       formKey.currentState?.save();
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+          context, MaterialPageRoute(builder: (context) => const Navbar()));
     }
   }
 
@@ -48,7 +48,6 @@ class LoginPageState extends State<LoginPage> {
             color: Color.fromRGBO(102, 102, 102, 0.08),
           ),
         ),
-        backgroundColor: Colors.white,
         leading: IconButton(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -56,7 +55,6 @@ class LoginPageState extends State<LoginPage> {
           ),
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0xFF333232),
             size: 24,
           ),
           onPressed: () {},
@@ -65,13 +63,11 @@ class LoginPageState extends State<LoginPage> {
           'Login',
           style: TextStyle(
             fontSize: 18,
-            color: Color(0xFF333232),
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white,
       body: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,

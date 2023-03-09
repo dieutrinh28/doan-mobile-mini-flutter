@@ -1,21 +1,40 @@
 import 'package:doan_mini_flutter/screen/login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class ThemeProvider extends ChangeNotifier {
+  bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
+
+  void toggleTheme() {
+    _isDarkMode = !_isDarkMode;
+    notifyListeners();
+  }
+
+  ThemeData getTheme() {
+    return _isDarkMode ? ThemeData.dark() : ThemeData.light();
+  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      theme: Provider.of<ThemeProvider>(context).getTheme(),
+      home: const LoginPage(),
     );
   }
 }
-
