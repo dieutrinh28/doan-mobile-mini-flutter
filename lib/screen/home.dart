@@ -1,8 +1,10 @@
 import 'dart:typed_data';
-
+import 'package:doan_mini_flutter/model/network_request.dart';
 import 'package:doan_mini_flutter/screen/infor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../model/User.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,48 +14,17 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List users = [
-    {
-      "id": 1,
-      "name": "Trần Hoài Phương",
-      "email": "hoaiphuong@gmail.com",
-      "password": "hoaiphuong123",
-      "avatar":
-          "https://phunugioi.com/wp-content/uploads/2020/10/anh-dai-dien-avt-anime-1.jpg"
-    },
-    {
-      "id": 2,
-      "name": "Nguyễn Như Trung",
-      "email": "nhutrung@gmail.com",
-      "password": "nhutrung123",
-      "avatar":
-          "https://news.meeycdn.com/uploads/images/2023/01/04/avatar-anime-nam-3-1672817351.jpg"
-    },
-    {
-      "id": 3,
-      "name": "Nguyễn Hữu Lợi",
-      "email": "huuloi@gmail.com",
-      "password": "huuloi123",
-      "avatar":
-          "https://news.meeycdn.com/uploads/images/2023/01/04/avatar-anime-nam-1-1672817351.jpg"
-    },
-    {
-      "id": 4,
-      "name": "Đào Phạm Trung Tín",
-      "email": "trungtin@gmail.com",
-      "password": "trungtin123",
-      "avatar":
-          "https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/02/avatar-anime-nam.jpg"
-    },
-    {
-      "id": 5,
-      "name": "Đỗ Diệu Trinh",
-      "email": "dieutrinh@gmail.com",
-      "password": "dieutrinh123",
-      "avatar":
-          "https://news.meeycdn.com/uploads/images/2022/12/30/anh-anime-nu-70-1672391589.JPG"
-    }
-  ];
+  List<User> userData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    NetworkRequest.fetchUser().then((dataFromSever) {
+      setState(() {
+        userData = dataFromSever;
+      });
+    });
+  }
 
   Future<Uint8List> getImageFromUrl(String url) async {
     final response = await http.get(Uri.parse(url));
@@ -72,9 +43,9 @@ class HomePageState extends State<HomePage> {
         ),
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: users.length,
+          itemCount: userData.length,
           itemBuilder: (context, index) {
-            final user = users[index];
+
             return Card(
               child: ListTile(
                 onTap: () {
@@ -89,7 +60,7 @@ class HomePageState extends State<HomePage> {
                   radius: 30,
                   child: ClipOval(
                     child: FutureBuilder<Uint8List>(
-                      future: getImageFromUrl(user['avatar']),
+                      future: getImageFromUrl('${userData[index].image}'),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done &&
                             snapshot.hasData) {
@@ -107,12 +78,12 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 title: Text(
-                  user['name'],
+                  '${userData[index].name}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                subtitle: Text(user['email']),
+                subtitle: Text('${userData[index].emaid}'),
                 trailing: PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'edit') {
