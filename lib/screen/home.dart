@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,7 +42,7 @@ class HomePageState extends State<HomePage> {
       "email": "trungtin@gmail.com",
       "password": "trungtin123",
       "avatar":
-          "https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/02/avatar-anime-nam.jpg?ssl=1"
+          "https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/02/avatar-anime-nam.jpg"
     },
     {
       "id": 5,
@@ -47,9 +50,15 @@ class HomePageState extends State<HomePage> {
       "email": "dieutrinh@gmail.com",
       "password": "dieutrinh123",
       "avatar":
-          "https://cdn.alongwalker.co/info/wp-content/uploads/2022/11/16190620/image-99-hinh-avatar-cute-ngau-ca-tinh-de-thuong-nhat-cho-nam-nu-178699bcb1cf6d58f3f17d3a1ee26472.jpg"
+          "https://news.meeycdn.com/uploads/images/2022/12/30/anh-anime-nu-70-1672391589.JPG"
     }
   ];
+
+  Future<Uint8List> getImageFromUrl(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    return bytes.buffer.asUint8List();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +71,31 @@ class HomePageState extends State<HomePage> {
         ),
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: users.length,
           itemBuilder: (context, index) {
-            final user = users[index] as Map;
+            final user = users[index];
             return Card(
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Text('${index + 1}'),
+                  radius: 30,
+                  child: ClipOval(
+                    child: FutureBuilder<Uint8List>(
+                      future: getImageFromUrl(user['avatar']),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          return Image.memory(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 60,
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ),
                 ),
                 title: Text(
                   user['name'],
