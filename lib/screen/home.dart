@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:doan_mini_flutter/screen/infor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -67,7 +68,7 @@ class HomePageState extends State<HomePage> {
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 0,
+          vertical: 32,
         ),
         child: ListView.builder(
           shrinkWrap: true,
@@ -76,6 +77,14 @@ class HomePageState extends State<HomePage> {
             final user = users[index];
             return Card(
               child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const InforPage(),
+                    ),
+                  );
+                },
                 leading: CircleAvatar(
                   radius: 30,
                   child: ClipOval(
