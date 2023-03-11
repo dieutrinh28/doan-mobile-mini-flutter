@@ -1,5 +1,8 @@
+import 'package:doan_mini_flutter/model/network_request.dart';
 import 'package:doan_mini_flutter/widget/navbar.dart';
 import 'package:flutter/material.dart';
+
+import '../model/User.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,12 +32,24 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  void onLoginClick() {
-    final isValid = formKey.currentState?.validate();
-    if (isValid != null && isValid == true) {
-      formKey.currentState?.save();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Navbar()));
+  void navigateNavbar(User user) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Navbar(user: user)));
+  }
+
+  Future<void> onLoginClick() async {
+    final email = emailController.text;
+    final password = passwordController.text;
+
+    try {
+      final user = await NetworkRequest.login(email, password);
+      navigateNavbar(user);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error $e'),
+        ),
+      );
     }
   }
 
@@ -216,7 +231,11 @@ class LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: onLoginClick,
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      onLoginClick();
+                    }
+                  },
                   child: const Text('Login'),
                 ),
               ),
