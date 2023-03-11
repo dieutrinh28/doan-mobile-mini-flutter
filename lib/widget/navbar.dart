@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import '../model/User.dart';
 
 class Navbar extends StatefulWidget {
-  final User user;
+
   const Navbar({
     Key? key,
-    required this.user,
   }) : super(key: key);
 
   @override

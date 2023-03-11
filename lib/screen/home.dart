@@ -45,7 +45,6 @@ class HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: userData.length,
           itemBuilder: (context, index) {
-
             return Card(
               child: ListTile(
                 onTap: () {

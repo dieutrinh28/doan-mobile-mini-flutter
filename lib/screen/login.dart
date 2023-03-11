@@ -2,8 +2,6 @@ import 'package:doan_mini_flutter/model/network_request.dart';
 import 'package:doan_mini_flutter/widget/navbar.dart';
 import 'package:flutter/material.dart';
 
-import '../model/User.dart';
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -32,9 +30,9 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-  void navigateNavbar(User user) {
+  void navigateNavbar() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Navbar(user: user)));
+        context, MaterialPageRoute(builder: (context) => const Navbar()));
   }
 
   Future<void> onLoginClick() async {
@@ -43,11 +41,11 @@ class LoginPageState extends State<LoginPage> {
 
     try {
       final user = await NetworkRequest.login(email, password);
-      navigateNavbar(user);
+      navigateNavbar();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error $e'),
+          content: Text('Failed to login. Please try again later. Error: $e'),
         ),
       );
     }
@@ -233,7 +231,9 @@ class LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      onLoginClick();
+                      // onLoginClick();
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (context) => const Navbar()));
                     }
                   },
                   child: const Text('Login'),
