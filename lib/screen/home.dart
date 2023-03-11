@@ -83,7 +83,7 @@ class HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                subtitle: Text('${userData[index].emaid}'),
+                subtitle: Text('${userData[index].email}'),
                 trailing: PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'edit') {
