@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../model/User.dart';
+
 class InforPage extends StatefulWidget {
-  const InforPage({Key? key}) : super(key: key);
+  final User user;
+  const InforPage({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   @override
   State<InforPage> createState() => InforPageState();
@@ -59,14 +65,14 @@ class InforPageState extends State<InforPage> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   SizedBox(height: 12),
                   Text(
-                    'Đỗ Diệu Trinh',
+                    widget.user.name!,
                   ),
                   SizedBox(height: 6),
                   Text(
-                    'dieutrinh123',
+                    widget.user.email!,
                   ),
                   SizedBox(height: 24),
                 ],

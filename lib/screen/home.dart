@@ -52,7 +52,7 @@ class HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const InforPage(),
+                      builder: (context) => InforPage(user: userData[index]),
                     ),
                   );
                 },
@@ -83,13 +83,13 @@ class HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                subtitle: Text('${userData[index].emaid}'),
+                subtitle: Text('${userData[index].email}'),
                 trailing: PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      //editById(item);
+                      NetworkRequest.updateUser(userData[index]);
                     } else if (value == 'delete') {
-                      //deleteById(id);
+                      NetworkRequest.deleteUser('${userData[index].id}');
                     }
                   },
                   itemBuilder: (context) {
