@@ -23,14 +23,14 @@ class NetworkRequest {
     }
   }
 
-  static Future<User> updateUser(User user) async {
+  static Future<void> updateUser(User user) async {
     final response = await http.put(
       Uri.parse('$url/${user.id}'),
       body: jsonEncode(user.toJson()),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      return;
     } else if (response.statusCode == 404) {
       throw Exception('Not found');
     } else {
@@ -50,23 +50,37 @@ class NetworkRequest {
   }
 
   static Future<User> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$url/$login'),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode(
-        {
-          'email': email,
-          'password': password,
-        },
-      ),
+    // final response = await http.post(
+    //   Uri.parse(url),
+    //   headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    //   body: jsonEncode(
+    //     {
+    //       'email': email,
+    //       'password': password,
+    //     },
+    //   ),
+    // );
+
+    //   if (response.statusCode == 200) {
+    //     return User.fromJson(jsonDecode(response.body));
+    //   } else if (response.statusCode == 401) {
+    //     throw Exception('Incorrect email or password. Please try again.');
+    //   } else if (response.statusCode == 404) {
+    //     throw Exception('User not found. Please check your email and try again.');
+    //   } else {
+    //     throw Exception('Unable to login. Please try again later.');
+    //   }
+
+    final users = await fetchUser();
+
+    final user = users.firstWhere(
+      (user) => user.email == email && user.password == password,
     );
 
-    if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
-    } else if (response.statusCode == 404) {
-      throw Exception('Invalid');
+    if (user != null) {
+      return user;
     } else {
-      throw Exception('Cant login');
+      throw Exception('Invalid email or password');
     }
   }
 }

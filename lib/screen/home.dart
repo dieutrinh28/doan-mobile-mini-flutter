@@ -45,7 +45,6 @@ class HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: userData.length,
           itemBuilder: (context, index) {
-
             return Card(
               child: ListTile(
                 onTap: () {
@@ -84,25 +83,11 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 subtitle: Text('${userData[index].email}'),
-                trailing: PopupMenuButton(
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      NetworkRequest.updateUser(userData[index]);
-                    } else if (value == 'delete') {
-                      NetworkRequest.deleteUser('${userData[index].id}');
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
-                      ),
-                    ];
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.red,
+                  onPressed: () {
+                    NetworkRequest.deleteUser('${userData[index].id}');
                   },
                 ),
               ),
