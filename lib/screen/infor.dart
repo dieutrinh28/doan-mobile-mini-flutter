@@ -51,7 +51,7 @@ class InforPageState extends State<InforPage> {
                     height: 160,
                     width: double.infinity,
                     child: Image.network(
-                      'https://i-ione.vnecdn.net/2019/05/06/30-8094-1557133075.jpg',
+                      widget.user.background!,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -67,10 +67,10 @@ class InforPageState extends State<InforPage> {
                         ),
                         shape: BoxShape.circle,
                       ),
-                      child: const CircleAvatar(
+                      child: CircleAvatar(
                         radius: 40,
                         backgroundImage: NetworkImage(
-                          'https://scontent.fsgn5-11.fna.fbcdn.net/v/t39.30808-6/334228228_232026739246350_7083544771812788463_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GxfMhx_dG1oAX9FzpEX&_nc_ht=scontent.fsgn5-11.fna&oh=00_AfBPpwqslTQKZ-5yJ-KqZz3HDWtZcoUX40aMtqxdpNiGIA&oe=640FB247',
+                          widget.user.image!,
                         ),
                         backgroundColor: Colors.transparent,
                       ),
@@ -117,7 +117,7 @@ class InforPageState extends State<InforPage> {
                   },
                   child: const Text('Save'),
                 ),
-              )
+              ),
             )
           ],
         ),

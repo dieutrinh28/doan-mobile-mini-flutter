@@ -83,30 +83,11 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 subtitle: Text('${userData[index].email}'),
-                trailing: PopupMenuButton(
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => InforPage(user: userData[index]),
-                        ),
-                      );
-                    } else if (value == 'delete') {
-                      NetworkRequest.deleteUser('${userData[index].id}');
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Edit'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
-                      ),
-                    ];
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.red,
+                  onPressed: () {
+                    NetworkRequest.deleteUser('${userData[index].id}');
                   },
                 ),
               ),
