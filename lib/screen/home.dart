@@ -86,7 +86,12 @@ class HomePageState extends State<HomePage> {
                 trailing: PopupMenuButton(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      NetworkRequest.updateUser(userData[index]);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InforPage(user: userData[index]),
+                        ),
+                      );
                     } else if (value == 'delete') {
                       NetworkRequest.deleteUser('${userData[index].id}');
                     }

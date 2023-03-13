@@ -231,9 +231,13 @@ class LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
-                      // onLoginClick();
-                      Navigator.pushReplacement(
-                          context, MaterialPageRoute(builder: (context) => const Navbar()));
+                      onLoginClick();
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const Navbar(),
+                      //   ),
+                      // );
                     }
                   },
                   child: const Text('Login'),

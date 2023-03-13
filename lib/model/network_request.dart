@@ -23,14 +23,14 @@ class NetworkRequest {
     }
   }
 
-  static Future<User> updateUser(User user) async {
+  static Future<void> updateUser(User user) async {
     final response = await http.put(
       Uri.parse('$url/${user.id}'),
       body: jsonEncode(user.toJson()),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
     );
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      return;
     } else if (response.statusCode == 404) {
       throw Exception('Not found');
     } else {
@@ -74,7 +74,7 @@ class NetworkRequest {
     final users = await fetchUser();
 
     final user = users.firstWhere(
-          (user) => user.email == email && user.password == password,
+      (user) => user.email == email && user.password == password,
     );
 
     if (user != null) {
@@ -82,7 +82,5 @@ class NetworkRequest {
     } else {
       throw Exception('Invalid email or password');
     }
-
-
   }
 }
