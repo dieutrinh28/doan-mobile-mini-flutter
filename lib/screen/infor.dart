@@ -17,7 +17,7 @@ class InforPage extends StatefulWidget {
 class InforPageState extends State<InforPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-
+  NetworkRequest repository = NetworkRequest();
   @override
   void initState() {
     super.initState();
@@ -70,7 +70,7 @@ class InforPageState extends State<InforPage> {
                       child: CircleAvatar(
                         radius: 40,
                         backgroundImage: NetworkImage(
-                          widget.user.image!,
+                          widget.user.avatar!,
                         ),
                         backgroundColor: Colors.transparent,
                       ),
@@ -108,11 +108,11 @@ class InforPageState extends State<InforPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    try {
-                      await NetworkRequest.updateUser(widget.user);
-                      print('User information has been updated successfully!');
-                    } catch (error) {
-                      print('Failed to update user information: $error');
+                    bool response = await NetworkRequest.updateUser(widget.user.id.toString(),nameController.text, emailController.text,widget.user.password.toString(),widget.user.avatar.toString(),widget.user.background.toString());
+                    if(response == true) {
+                      throw Exception("Success");
+                    } else {
+                      throw Exception("Fail");
                     }
                   },
                   child: const Text('Save'),

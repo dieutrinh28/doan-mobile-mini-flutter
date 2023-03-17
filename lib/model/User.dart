@@ -3,7 +3,7 @@ class User {
   String? name;
   String? email;
   String? password;
-  String? image;
+  String? avatar;
   String? background;
 
   User(
@@ -11,7 +11,7 @@ class User {
         this.name,
         this.email,
         this.password,
-        this.image,
+        this.avatar,
         this.background});
 
   User.fromJson(Map<String, dynamic> json) {
@@ -19,7 +19,7 @@ class User {
     name = json['name'];
     email = json['email'];
     password = json['password'];
-    image = json['image'];
+    avatar = json['avatar'];
     background = json['background'];
   }
 
@@ -29,7 +29,7 @@ class User {
     data['name'] = this.name;
     data['email'] = this.email;
     data['password'] = this.password;
-    data['image'] = this.image;
+    data['avatar'] = this.avatar;
     data['background'] = this.background;
     return data;
   }

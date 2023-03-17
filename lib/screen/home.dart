@@ -59,7 +59,7 @@ class HomePageState extends State<HomePage> {
                   radius: 30,
                   child: ClipOval(
                     child: FutureBuilder<Uint8List>(
-                      future: getImageFromUrl('${userData[index].image}'),
+                      future: getImageFromUrl('${userData[index].avatar}'),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done &&
                             snapshot.hasData) {
@@ -86,8 +86,15 @@ class HomePageState extends State<HomePage> {
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   color: Colors.red,
-                  onPressed: () {
-                    NetworkRequest.deleteUser('${userData[index].id}');
+                  onPressed: () async {
+                    bool response = await NetworkRequest.deleteUser(
+                        '${userData[index].id}');
+                    if (response == true) {
+                      throw Exception("Success");
+                    } else {
+                      throw Exception("Fail");
+                    }
+
                   },
                 ),
               ),
