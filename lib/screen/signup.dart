@@ -29,8 +29,16 @@ class SignupState extends State<Signup> {
       name: nameController.text,
       email: emailController.text,
       password: passwordController.text,
+      avatar: "https://phunugioi.com/wp-content/uploads/2020/10/anh-dai-dien-avt-anime-1.jpg",
+      background: "https://thuthuatnhanh.com/wp-content/uploads/2022/06/Hinh-nen-iPad-4K.jpg",
     );
-    final isSuccess = await NetworkRequest.addUser(user);
+    final name = nameController.text;
+    final email = emailController.text;
+    final password = passwordController.text;
+    final avatar = "";
+    final background = "";
+    final isSuccess =
+        await NetworkRequest.addUser(name, email, password, avatar, background);
     if (isSuccess) {
       setState(() {
         nameController.text = '';
@@ -92,6 +100,14 @@ class SignupState extends State<Signup> {
                 name: 'Password',
                 controller: passwordController,
               ),
+              // buildItem(
+              //   name: 'Avatar',
+              //   controller: avatarController,
+              // ),
+              // buildItem(
+              //   name: 'cover',
+              //   controller: coverController,
+              // ),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,

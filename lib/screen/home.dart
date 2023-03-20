@@ -90,11 +90,11 @@ class HomePageState extends State<HomePage> {
                     bool response = await NetworkRequest.deleteUser(
                         '${userData[index].id}');
                     if (response == true) {
+                      setState(() {});
                       throw Exception("Success");
                     } else {
                       throw Exception("Fail");
                     }
-
                   },
                 ),
               ),

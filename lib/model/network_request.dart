@@ -4,12 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class NetworkRequest {
-  static const String url =
-      'http://192.168.1.13/restful_api/api/list_user/read.php';
-  static const String urlUpdate =
-      "http://192.168.1.13/restful_api/api/list_user/update.php";
-  static const String urlDelete =
-      "http://192.168.1.13/restful_api/api/list_user/delete.php";
+  static const String url = 'http://192.168.250.51/restful_api/api/list_user';
 
   static List<User> parseUser(String responseBody) {
     var list = json.decode(responseBody) as List<dynamic>;
@@ -18,7 +13,9 @@ class NetworkRequest {
   }
 
   static Future<List<User>> fetchUser({int id = 1}) async {
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(
+      Uri.parse('${url}/read.php'),
+    );
     if (response.statusCode == 200) {
       return compute(parseUser, response.body);
     } else if (response.statusCode == 404) {
@@ -27,10 +24,18 @@ class NetworkRequest {
       throw Exception('Cant get user');
     }
   }
-  static Future<bool> addUser(User user) async {
+
+  static Future<bool> addUser(String name, String email,
+      String password, String avatar, String background) async {
     final response = await http.post(
-      Uri.parse('${url}/register'),
-      body: jsonEncode(user.toJson()),
+      Uri.parse('${url}/create.php'),
+      body: jsonEncode(<String, String>{
+        'name': name,
+        "email": email,
+        "password": password,
+        "avatar": avatar,
+        "background": background
+      }),
       headers: {'Content-Type': 'application/json'},
     );
     return response.statusCode == 200;
@@ -40,7 +45,7 @@ class NetworkRequest {
       String password, String avatar, String background) async {
     try {
       final respone = await http.put(
-        Uri.parse(urlUpdate),
+        Uri.parse('${url}/update.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -66,7 +71,7 @@ class NetworkRequest {
   static Future deleteUser(String id) async {
     try {
       final respone = await http.delete(
-        Uri.parse(urlDelete),
+        Uri.parse('${url}/delete.php'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
