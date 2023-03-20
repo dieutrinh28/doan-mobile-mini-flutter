@@ -4,7 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class NetworkRequest {
-  static const String url = 'https://api.npoint.io/2d8611e51e69002103b2';
+  static const String url =
+      'http://192.168.1.13/restful_api/api/list_user/read.php';
+  static const String urlUpdate =
+      "http://192.168.1.13/restful_api/api/list_user/update.php";
+  static const String urlDelete =
+      "http://192.168.1.13/restful_api/api/list_user/delete.php";
 
   static List<User> parseUser(String responseBody) {
     var list = json.decode(responseBody) as List<dynamic>;
@@ -31,29 +36,51 @@ class NetworkRequest {
     return response.statusCode == 200;
   }
 
-  static Future<void> updateUser(User user) async {
-    final response = await http.put(
-      Uri.parse('$url/${user.id}'),
-      body: jsonEncode(user.toJson()),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-    );
-    if (response.statusCode == 200) {
-      return;
-    } else if (response.statusCode == 404) {
-      throw Exception('Not found');
-    } else {
-      throw Exception('Cant update user');
+  static Future updateUser(String id, String name, String email,
+      String password, String avatar, String background) async {
+    try {
+      final respone = await http.put(
+        Uri.parse(urlUpdate),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "id": id,
+          'name': name,
+          "email": email,
+          "password": password,
+          "avatar": avatar,
+          "background": background
+        }),
+      );
+      if (respone.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return e.toString();
     }
   }
 
-  static Future<void> deleteUser(String id) async {
-    final response = await http.delete(Uri.parse('$url/$id'));
-    if (response.statusCode == 200) {
-      return;
-    } else if (response.statusCode == 404) {
-      throw Exception('Not found');
-    } else {
-      throw Exception('Cant delete user');
+  static Future deleteUser(String id) async {
+    try {
+      final respone = await http.delete(
+        Uri.parse(urlDelete),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "id": id,
+        }),
+      );
+      if (respone.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return e.toString();
     }
   }
 
