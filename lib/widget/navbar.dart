@@ -2,8 +2,6 @@ import 'package:doan_mini_flutter/screen/home.dart';
 import 'package:doan_mini_flutter/screen/setting.dart';
 import 'package:flutter/material.dart';
 
-import '../model/User.dart';
-
 class Navbar extends StatefulWidget {
 
   const Navbar({

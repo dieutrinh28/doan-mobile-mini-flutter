@@ -1,4 +1,5 @@
 import 'package:doan_mini_flutter/model/network_request.dart';
+import 'package:doan_mini_flutter/screen/signup.dart';
 import 'package:doan_mini_flutter/widget/navbar.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,11 @@ class LoginPageState extends State<LoginPage> {
 
   void navigateNavbar() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Navbar()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Navbar(),
+      ),
+    );
   }
 
   Future<void> onLoginClick() async {
@@ -81,7 +86,7 @@ class LoginPageState extends State<LoginPage> {
         ),
         centerTitle: true,
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 0,
@@ -243,6 +248,31 @@ class LoginPageState extends State<LoginPage> {
                   child: const Text('Login'),
                 ),
               ),
+              const SizedBox(height: 24),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      'Don’t have an account?',
+                      textAlign: TextAlign.center,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Signup(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Register an account',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),

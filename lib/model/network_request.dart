@@ -22,6 +22,14 @@ class NetworkRequest {
       throw Exception('Cant get user');
     }
   }
+  static Future<bool> addUser(User user) async {
+    final response = await http.post(
+      Uri.parse('${url}/register'),
+      body: jsonEncode(user.toJson()),
+      headers: {'Content-Type': 'application/json'},
+    );
+    return response.statusCode == 200;
+  }
 
   static Future<void> updateUser(User user) async {
     final response = await http.put(
