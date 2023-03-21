@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class NetworkRequest {
-  static const String url = 'http://192.168.250.51/restful_api/api/list_user';
+  static const String url = 'http://192.168.141.51/restful_api/api/list_user';
 
   static List<User> parseUser(String responseBody) {
     var list = json.decode(responseBody) as List<dynamic>;
@@ -25,20 +25,30 @@ class NetworkRequest {
     }
   }
 
-  static Future<bool> addUser(String name, String email,
+  static Future addUser(String name, String email,
       String password, String avatar, String background) async {
-    final response = await http.post(
-      Uri.parse('${url}/create.php'),
-      body: jsonEncode(<String, String>{
-        'name': name,
-        "email": email,
-        "password": password,
-        "avatar": avatar,
-        "background": background
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
-    return response.statusCode == 200;
+    try {
+      final respone = await http.put(
+        Uri.parse('${url}/create.php'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          "email": email,
+          "password": password,
+          "avatar": avatar,
+          "background": background
+        }),
+      );
+      if (respone.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   static Future updateUser(String id, String name, String email,

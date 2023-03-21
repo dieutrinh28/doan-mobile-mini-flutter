@@ -35,17 +35,22 @@ class SignupState extends State<Signup> {
     final name = nameController.text;
     final email = emailController.text;
     final password = passwordController.text;
-    final avatar = "";
-    final background = "";
-    final isSuccess =
+    final avatar = "https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg";
+    final background = "https://thuthuatnhanh.com/wp-content/uploads/2022/06/Hinh-nen-iPad-4K.jpg";
+    final response =
         await NetworkRequest.addUser(name, email, password, avatar, background);
-    if (isSuccess) {
+
+
+
+    if (response == true) {
       setState(() {
         nameController.text = '';
         emailController.text = '';
         passwordController.text = '';
       });
-    } else {}
+    } else {
+      throw Exception("Create Fail");
+    }
   }
 
   @override
