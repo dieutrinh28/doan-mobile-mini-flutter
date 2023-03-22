@@ -18,6 +18,8 @@ class InforPageState extends State<InforPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   NetworkRequest repository = NetworkRequest();
+
+
   @override
   void initState() {
     super.initState();
@@ -108,11 +110,29 @@ class InforPageState extends State<InforPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    bool response = await NetworkRequest.updateUser(widget.user.id.toString(),nameController.text, emailController.text,widget.user.password.toString(),widget.user.avatar.toString(),widget.user.background.toString());
-                    if(response == true) {
-                      throw Exception("Success");
+                    bool response = await NetworkRequest.updateUser(
+                      widget.user.id.toString(),
+                      nameController.text,
+                      emailController.text,
+                      widget.user.password.toString(),
+                      widget.user.avatar.toString(),
+                      widget.user.background.toString(),
+                    );
+                    if (response == true) {
+                      setState(() {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Success to update.'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      });
                     } else {
-                      throw Exception("Fail");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Failed to update.'),
+                        ),
+                      );
                     }
                   },
                   child: const Text('Save'),

@@ -1,9 +1,9 @@
 import 'package:doan_mini_flutter/screen/home.dart';
 import 'package:doan_mini_flutter/screen/setting.dart';
+import 'package:doan_mini_flutter/screen/signup.dart';
 import 'package:flutter/material.dart';
 
 class Navbar extends StatefulWidget {
-
   const Navbar({
     Key? key,
   }) : super(key: key);
@@ -17,6 +17,7 @@ class NavbarState extends State<Navbar> {
 
   List<Widget> pages = const [
     HomePage(),
+    SignupPage(),
     SettingPage(),
   ];
 
@@ -36,6 +37,10 @@ class NavbarState extends State<Navbar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

@@ -3,6 +3,8 @@ import 'package:doan_mini_flutter/screen/signup.dart';
 import 'package:doan_mini_flutter/widget/navbar.dart';
 import 'package:flutter/material.dart';
 
+import '../model/User.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -49,8 +51,8 @@ class LoginPageState extends State<LoginPage> {
       navigateNavbar();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to login. Please try again later. Error: $e'),
+        const SnackBar(
+          content: Text('Failed to login. Please try again later.'),
         ),
       );
     }
@@ -237,12 +239,6 @@ class LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       onLoginClick();
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const Navbar(),
-                      //   ),
-                      // );
                     }
                   },
                   child: const Text('Login'),
@@ -252,7 +248,7 @@ class LoginPageState extends State<LoginPage> {
               Center(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'Don’t have an account?',
                       textAlign: TextAlign.center,
                     ),
@@ -261,11 +257,11 @@ class LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Signup(),
+                            builder: (context) => const SignupPage(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'Register an account',
                         textAlign: TextAlign.center,
                       ),

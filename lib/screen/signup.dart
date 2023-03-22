@@ -1,20 +1,25 @@
-import 'package:doan_mini_flutter/model/network_request.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
-import '../model/User.dart';
+import '../model/network_request.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
-  State<Signup> createState() => SignupState();
+  State<SignupPage> createState() => SignupPageState();
 }
 
-class SignupState extends State<Signup> {
+class SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  File? imageFile;
 
   @override
   void dispose() {
@@ -25,13 +30,6 @@ class SignupState extends State<Signup> {
   }
 
   void signUp() async {
-    final user = User(
-      name: nameController.text,
-      email: emailController.text,
-      password: passwordController.text,
-      avatar: "https://phunugioi.com/wp-content/uploads/2020/10/anh-dai-dien-avt-anime-1.jpg",
-      background: "https://thuthuatnhanh.com/wp-content/uploads/2022/06/Hinh-nen-iPad-4K.jpg",
-    );
     final name = nameController.text;
     final email = emailController.text;
     final password = passwordController.text;
@@ -39,8 +37,6 @@ class SignupState extends State<Signup> {
     final background = "https://thuthuatnhanh.com/wp-content/uploads/2022/06/Hinh-nen-iPad-4K.jpg";
     final response =
         await NetworkRequest.addUser(name, email, password, avatar, background);
-
-
 
     if (response == true) {
       setState(() {
@@ -51,6 +47,58 @@ class SignupState extends State<Signup> {
     } else {
       throw Exception("Create Fail");
     }
+  }
+
+  Future<void> openGallery() async {
+    List<Asset> resultList = [];
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 1,
+        enableCamera: true,
+        selectedAssets: resultList,
+        cupertinoOptions: const CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: const MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Select Image",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      if (resultList.isNotEmpty) {
+        Asset asset = resultList[0];
+        asset.getByteData().then((byteData) {
+          imageFile = File.fromRawPath(byteData.buffer.asUint8List());
+        });
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> openCamera() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        imageFile = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> saveImage(File image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = '${directory.path}/image.png';
+    await image.copy(imagePath);
   }
 
   @override
@@ -105,13 +153,57 @@ class SignupState extends State<Signup> {
                 name: 'Password',
                 controller: passwordController,
               ),
-              // buildItem(
-              //   name: 'Avatar',
-              //   controller: avatarController,
+              // const SizedBox(height: 24),
+              // const Text(
+              //   "Images",
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w600,
+              //     fontSize: 14,
+              //     color: Color(0xFF333232),
+              //   ),
               // ),
-              // buildItem(
-              //   name: 'cover',
-              //   controller: coverController,
+              // const SizedBox(height: 8),
+              // Center(
+              //   child: imageFile == null
+              //       ? const Text('No image selected.')
+              //       : Image.file(
+              //           imageFile!,
+              //           fit: BoxFit.cover,
+              //         ),
+              // ),
+              // Center(
+              //   child: IconButton(
+              //     onPressed: () {
+              //       showModalBottomSheet(
+              //         context: context,
+              //         builder: (BuildContext context) {
+              //           return Wrap(
+              //             children: [
+              //               ListTile(
+              //                 leading: const Icon(Icons.camera_alt),
+              //                 title: const Text('Take a photo'),
+              //                 onTap: () {
+              //                   Navigator.of(context).pop();
+              //                   openCamera();
+              //                 },
+              //               ),
+              //               ListTile(
+              //                 leading: const Icon(Icons.image),
+              //                 title: const Text('Choose from gallery'),
+              //                 onTap: () {
+              //                   Navigator.of(context).pop();
+              //                   openGallery();
+              //                 },
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       );
+              //     },
+              //     icon: const Icon(
+              //       Icons.add_a_photo,
+              //     ),
+              //   ),
               // ),
               const SizedBox(height: 24),
               SizedBox(
@@ -122,10 +214,18 @@ class SignupState extends State<Signup> {
                   onPressed: () {
                     if (formKey.currentState?.validate != null) {
                       signUp();
-                    } else {}
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Failed to signup. Please try again later.'),
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -147,7 +247,7 @@ class SignupState extends State<Signup> {
           style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
-            color: Color(0xFF333232),
+            // color: Color(0xFF333232),
           ),
         ),
         const SizedBox(height: 8),

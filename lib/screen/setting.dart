@@ -1,3 +1,4 @@
+import 'package:doan_mini_flutter/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -73,6 +74,24 @@ class SettingPageState extends State<SettingPage> {
                   },
                 ),
               ],
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+              title: const Text(
+                'Log out',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Colors.red,
+                ),
+              ),
             ),
           ],
         ),

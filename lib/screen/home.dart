@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 import '../model/User.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -35,6 +37,22 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        shape: const Border(
+          bottom: BorderSide(
+            color: Color.fromRGBO(102, 102, 102, 0.08),
+          ),
+        ),
+        title: const Text(
+          'Home',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.symmetric(
@@ -90,10 +108,23 @@ class HomePageState extends State<HomePage> {
                     bool response = await NetworkRequest.deleteUser(
                         '${userData[index].id}');
                     if (response == true) {
-                      setState(() {});
-                      throw Exception("Success");
+                      final filtered = userData
+                          .where((element) => element.id != userData[index].id)
+                          .toList();
+                      setState(() {
+                        userData = filtered;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Success to delete.'),
+                          ),
+                        );
+                      });
                     } else {
-                      throw Exception("Fail");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Failed to delete.'),
+                        ),
+                      );
                     }
                   },
                 ),
